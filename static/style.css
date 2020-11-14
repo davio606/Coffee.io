@@ -48,6 +48,37 @@ text-align: center;
 }
 
 
+.form-user{
+position: absolute;
+left: 26.53%;
+right: 25.76%;
+top: 13.28%;
+bottom: 1%;
+
+background: #CDEBF4;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 20px;
+text-align: center;
+
+}
+
+.form-user h1{
+    text-align:center;
+}
+
+.form-user input{
+    width:30%;
+    background:#ffffff;
+    border:3px solid #fff;
+    border-radius: 3px;
+    padding:6px 50px;
+    margin-top:13px;
+    margin-bottom:13px;
+    font-size:16px;
+    font-family: Lora;
+}
+
+
 /*login form*/
 .form-wrap-small{
 position: absolute;
@@ -84,7 +115,6 @@ left: 26.53%;
 right: 25.76%;
 top: 13.28%;
 bottom: 45%;
-
 text-align: center;}
 
 .userprofile input {
@@ -144,7 +174,7 @@ header nav{
 /*showcase*/
 #showcase{
     min-height:1100px;
-    background:url(' /img/tatte.jpg') no-repeat 0 -750px;
+    background:url('../img/tatte.jpg') no-repeat 0 -750px;
     text-align: center;
     color: #ffffff;
 }
@@ -230,6 +260,46 @@ footer{
   border-radius:20px;
   padding:3px;
 }
+
+
+.order-menu img{
+  max-width:500px;
+  margin-right:30px;
+  border-radius:20px;
+  padding:3px;
+  position: absolute;
+  left: 15%;
+  right: 1.88%;
+  top: 35%;
+  bottom: 20%;
+}
+
+.order-menu-options{
+position: absolute;
+left: 50%;
+right: 10%;
+top: 35%;
+bottom: 10%;
+background: #CDEBF4;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 20px;
+text-align: left;
+}
+
+.order-menu-options h1{
+    text-align:center;
+}
+
+.check-options{
+    width:60%;
+    padding:6px 20px;
+    margin-top: 20px;
+    margin-bottom:20px;
+    font-size:30px;
+    font-family: Lora;
+}
+
+
 .single-menu h4{
   text-transform:capitalize;
   font-size:22px;
@@ -265,4 +335,52 @@ footer{
 .button1:hover {
   background-color: #CDEBF4;
   color: black;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #CDEBF4;
+  border-radius:20px;
+}
+
+.button2:hover {
+  background-color: #D16666;
+  color: black;
+}
+
+
+.shopping-cart{
+position: absolute;
+left: 15%;
+right: 15%;
+top: 35%;
+bottom: -20%;
+background: #CDEBF4;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 20px;
+text-align: center;
+}
+
+.shopping-cart h1{
+    text-align:center;
+}
+
+
+.shopping-cart img{
+  max-width:250px;
+  margin-right:30px;
+  border-radius:20px;
+  padding:3px;
+  position: absolute;
+  left: 5%;
+  right: 1.88%;
+  top: 5%;
+  bottom: 35%;
+}
+
+label {
+    display:inline-block;
+    width:140px;
+    text-align:right;
 }
