@@ -9,9 +9,8 @@ router.get('/', function(req, res, next) {
     "SELECT * FROM `MenuItem` WHERE shopID = ?", id,
     function(error, results, fields) {
       if (error) throw error;
-      res.render('order', { title: 'Express', name:name, items: results});
+      res.render('order', { title: 'Express', name:name, user: req.user, items: results});
     }
   );
 });
-console.log("here again");
 module.exports = router;

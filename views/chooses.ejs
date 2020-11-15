@@ -5,47 +5,50 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>coffee.io | Order Form</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <header>
-        <div class="container">
-            <div id="branding">
-                <a href="/index"><img src="./img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
-
-            </div>
-    </header>
-
+<header>
+    <div class="container">
+       <div id="branding">
+        <a href="/"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
+       </div>
+       <nav>
+           <u1><% if (!user) { %>
+            <li><a href="/login">Sign Up/Login</a></li>
+            <% } else { %>
+                <li><a href="/signup"><%= user %></a></li>
+                <li><a href="/account">Account</a></li>
+                <% } %>
+            <li><a href="/about">About</a></li>
+           </u1>
+       </nav>
+    </div>
+</header>
     <div class="wrapper">
         <div class="title">
             <h3>Order Form</h3>
-            <h2>Cold Foam Iced Coffee</h2>
+            <h2><%= name%></h2>
 
         </div>
         <div class="menu">
             <div class="order-menu">
-                    <img src="./img/coldfoam.png">
             
                 <div class="order-menu-options">
                     <h1>Select Options</h1>
                     <form>
-                        
-                        <label class="check-options">Vanilla
-                            <input type="checkbox">
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="check-options">Caramel
-                            <input type="checkbox">
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="check-options">Lavender
-                            <input type="checkbox">
-                            <span class="checkmark"></span>
-                        </label>
+                        <% if (options) { %> 
+                            <% options.forEach(option => { %>
+                                <label class="check-options"><%= option.options %>
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                            </label>
+                            <% }) %>
+                        <% } %>
                         <label class="check-options">Select Quantity
-                        <input type="number" min="1" max="30"> </label>
-                        <button class="button button2">Add to Cart</button>
+                        <input id="num" type="number" min="1" max="30"> </label>
+                        <button class="button button2" onclick = "helper.addOrder(user.userID, document.getElementById('num'), name, '$2.50')">Add to Cart</button>
                     </form>
                 </div>
             </div>

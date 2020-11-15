@@ -11,10 +11,20 @@
 <body>
 <header>
     <div class="container">
-        <div id="branding">
-            <a href="/index"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
-
-        </div>
+       <div id="branding">
+        <a href="/"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
+       </div>
+       <nav>
+           <u1><% if (!user) { %>
+            <li><a href="/login">Sign Up/Login</a></li>
+            <% } else { %>
+                <li><a href="/signup"><%= user %></a></li>
+                <li><a href="/account">Account</a></li>
+                <% } %>
+            <li><a href="/about">About</a></li>
+           </u1>
+       </nav>
+    </div>
 </header>
   
 <div class="wrapper">
@@ -25,9 +35,9 @@
     <% items.forEach(item => { %>
         <div class="single-menu">
             <div class="menu-content">
-                <h4><%= item.name %></h4> 
-                <p><%= item.description %> <%= item.price%></p>
-                <a class = "button button1">Select</a>
+                <h4><%= item.name %>  <%=item.baseprice%></h4>
+                <p><%= item.description %></p>
+                <a href = "/chooses?name='+<%=item.name %>'&itemid=<%=item.itemID %>" class = "button button1">Select</a>
             </div>
         </div>
     <% }) %>
