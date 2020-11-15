@@ -23,6 +23,11 @@
             <h4>Order History</h4> <br>
 
         </div>
+        <% if (user.type == "owner") {%>
+        <form action="/export?shopID=<%= shopID %>" method="post">
+            <input type="submit" name="upvote" value="Upvote" class="button button2">Export All </input>
+        </form>
+        <% } %>
         <% orderdata.forEach(order => { %>
         <div>
            <%= order.orderID %>

@@ -29,7 +29,7 @@ router.get('/', function (req, res, next) {
                         "SELECT * FROM `ListOrders` WHERE shopID = ? ", results[0].shopID,
                         function (error, resultsb, fields) {
                             if (error) throw error;
-                            res.render('orderhistory', { title: 'Express', orderdata: resultsb });
+                            res.render('orderhistory', { title: 'Express', orderdata: resultsb, user: req.user, shopID: results[0].shopID });
                         }
                     );
                 }
