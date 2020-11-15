@@ -22,6 +22,7 @@ var orderRouter = require("./routes/order");
 var receiveRouter = require("./routes/receive");
 var helpRouter = require("./helper");
 const ownerloginRouter = require('./routes/ownerlogin');
+const orderhistoryRouter = require('./routes/orderhistory');
 const { info } = require("console");
 var app = express();
 
@@ -102,6 +103,7 @@ ownerloginstrat = new GoogleStrategy(
                   function (error, results, fields) {
                     if (error) throw error;
                     if (results.length != 0) {
+                      userinfo.type = "owner";
                       userinfo.new = true;
                       return done(null, userinfo);
                     }
@@ -159,6 +161,7 @@ userloginstrat = new GoogleStrategy(
                   function (error, results, fields) {
                     if (error) throw error;
                     if (results.length != 0) {
+                      userinfo.type = "user";
                       userinfo.new = true;
                       return done(null, userinfo);
                     }
@@ -265,6 +268,7 @@ app.use("/chooses", choosesRouter);
 app.use("/editmenu", editMenuRouter);
 app.use("/receive", receiveRouter);
 app.use('/ownerlogin', ownerloginRouter);
+app.use('/orderhistory', orderhistoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
