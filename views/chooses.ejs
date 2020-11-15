@@ -48,7 +48,7 @@
                         <% } %>
                         <label class="check-options">Select Quantity
                         <input id="num" type="number" min="1" max="30"> </label>
-                        <button class="button button2" onclick = "helper.addOrder(user.userID, document.getElementById('num'), name, '$2.50')">Add to Cart</button>
+                        <button class="button button2" onclick = "/addOrder?userid='+<%=user.userID %>'&Quantity=1&name='+<%= name%>'&price=2.50">Add to Cart</button>
                     </form>
                 </div>
             </div>
