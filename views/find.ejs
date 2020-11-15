@@ -30,7 +30,7 @@
         <div class="single-menu">
             <div class="menu-content">
                 <h4><%= shop.name %></h4> 
-                <button action="<%= `/bakery?shopid=` + shop.shopID %>" class="button button1">Select</button>
+                <a href = "/order?name='+<%=shop.name %>'&shopid='+<%=shop.shopID %>'" class = "button button1">Select</a>
             </div>
         </div>
 <% }) %>

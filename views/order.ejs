@@ -19,54 +19,18 @@
   
 <div class="wrapper">
     <div class="title">
-        <h4>Menu at Mudhouse 10th St.</h4> <br>
-        <a href="/order">Drinks</a> &nbsp; &nbsp; <a href="/bakery">Bakery</a>
-
+        <h4><%= name %></h4><br>
     </div>
     <div class="menu">
+    <% items.forEach(item => { %>
         <div class="single-menu">
             <div class="menu-content">
-                <h4>Drink Name<span>$4.85</span></h4> 
-                <p>Japanese Iced Coffee Topped with Silky Cold Foam, Infused with House Made Syrups.</p> <img src="./img/coffeestock.png">
-                <button class="button button1">Select</button>
-
+                <h4><%= item.name %></h4> 
+                <p><%= item.description %> <%= item.price%></p>
+                <a href = "/order?name='+<%=shop.name %>'&shopid='+<%=shop.shopID %>'" class = "button button1">Select</a>
             </div>
         </div>
-        <div class="single-menu">
-            <div class="menu-content">
-                <h4>Drink Name <span>$4.85</span></h4>
-                <p>Japanese Iced Coffee Topped with Silky Cold Foam, Infused with House Made Syrups.</p> <img src="./img/coffeestock.png">
-                <button class="button button1">Select</button>
-            </div>
-        </div>
-        <div class="single-menu">
-            <div class="menu-content">
-                <h4>Drink Name<span>$4.85</span></h4>
-                <p>Japanese Iced Coffee Topped with Silky Cold Foam, Infused with House Made Syrups.</p> <img src="./img/coffeestock.png">
-                <button class="button button1">Select</button>
-            </div>
-        </div>
-        <div class="single-menu">
-            <div class="menu-content">
-                <h4>Drink Name <span>$4.85</span></h4>
-                <p>Japanese Iced Coffee Topped with Silky Cold Foam, Infused with House Made Syrups.</p> <img src="./img/coffeestock.png">
-                <button class="button button1">Select</button>
-            </div>
-        </div>
-        <div class="single-menu">
-            <div class="menu-content">
-                <h4>Drink Name <span>$4.85</span></h4>
-                <p>Japanese Iced Coffee Topped with Silky Cold Foam, Infused with House Made Syrups.</p> <img src="./img/coffeestock.png">
-                <button class="button button1">Select</button>
-            </div>
-        </div>
-        <div class="single-menu">
-            <div class="menu-content">
-                <h4>Drink Name <span>$4.85</span></h4>
-                <p>Japanese Iced Coffee Topped with Silky Cold Foam, Infused with House Made Syrups.</p> <img src="./img/coffeestock.png">
-                <button class="button button1">Select</button>
-            </div>
-        </div>
+    <% }) %>
     </div>
 </div>
 
