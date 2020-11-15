@@ -24,7 +24,11 @@
             </nav>
         </div>
     </header>
-
+<% shops.forEach(shop => { %>
+<p>
+<%= shop.name %>
+</p>
+<% }) %>
     <footer>
         <p>coffee.io, Copyright &copy; 2020</p>
     </footer>
