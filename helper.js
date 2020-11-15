@@ -1,6 +1,7 @@
+var express = require('express');
 const mysql = require("mysql");
 var router = express.Router();
-const connection = require('database');
+const connection = require('./database');
 
 function addOrder(ID, quant, itemname, price_total) {
      connection.query(

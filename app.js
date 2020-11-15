@@ -100,6 +100,7 @@ ownerloginstrat = new GoogleStrategy(
                   function (error, results, fields) {
                     if (error) throw error;
                     if (results.length != 0) {
+                      userinfo.type = "owner";
                       userinfo.new = true;
                       return done(null, userinfo);
                     }
@@ -157,6 +158,7 @@ userloginstrat = new GoogleStrategy(
                   function (error, results, fields) {
                     if (error) throw error;
                     if (results.length != 0) {
+                      userinfo.type = "user";
                       userinfo.new = true;
                       return done(null, userinfo);
                     }
