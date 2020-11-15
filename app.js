@@ -50,6 +50,7 @@ passport.use(
       callbackURL: "/login/callback",
     },
     function(accessToken, refreshToken, profile, done) {
+      console.log(profile._json);
      // User.findOrCreate({ googleId: profile.id }, function (err, user) {
         return done(err, user);
       //});
