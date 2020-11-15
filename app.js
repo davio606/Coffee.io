@@ -20,6 +20,7 @@ var loginRouter = require("./routes/login");
 var aboutRouter = require("./routes/about");
 var orderRouter = require("./routes/order");
 var receiveRouter = require("./routes/receive");
+var helpRouter = require("./helper");
 const ownerloginRouter = require('./routes/ownerlogin');
 const orderhistoryRouter = require('./routes/orderhistory');
 const exportRouter = require('./routes/export');
@@ -54,6 +55,7 @@ app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 app.use("/account", accountRouter);
 app.use("/signup", signupRouter);
+app.use("/addOrder", helpRouter);
 
 function done(err, user) {
   res.redirect("/find");
