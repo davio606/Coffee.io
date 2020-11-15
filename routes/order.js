@@ -6,10 +6,10 @@ router.get('/', function(req, res, next) {
   var name = req.query.name;
   var id = parseInt(req.query.shopid);
   connection.query(
-    "SELECT * FROM 'MenuItem' WHERE shopID = ?", id,
+    "SELECT * FROM `MenuItem` WHERE shopID = ?", id,
     function(error, results, fields) {
       if (error) throw error;
-      res.render('find', { title: 'Express', name:name, items: results});
+      res.render('order', { title: 'Express', name:name, items: results});
     }
   );
 });
