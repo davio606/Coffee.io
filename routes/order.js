@@ -13,5 +13,4 @@ router.get('/', function(req, res, next) {
     }
   );
 });
-console.log("here again");
 module.exports = router;

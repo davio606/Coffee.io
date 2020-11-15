@@ -20,6 +20,7 @@ var loginRouter = require("./routes/login");
 var aboutRouter = require("./routes/about");
 var orderRouter = require("./routes/order");
 var receiveRouter = require("./routes/receive");
+const ownerloginRouter = require('./routes/ownerlogin');
 const { info } = require("console");
 var app = express();
 
@@ -56,63 +57,119 @@ function done(err, user) {
   res.redirect("/find");
 }
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID:
-        "450927576549-gstvnstsb2taa9qfqda3f14fusjrfqsj.apps.googleusercontent.com",
-      clientSecret: "UPgRFeHYJC7i4Ed1tAGWCz4Y",
-      callbackURL: "/login/callback",
-    },
-    async function (accessToken, refreshToken, profile, done) {
-      userinfo = profile._json;
-      connection.query(
-        "SELECT * FROM `User` WHERE `email` =" +
-          connection.escape(userinfo.email),
-        function (error, results, fields) {
-          if (error) throw error;
-          if (results.length != 0) {
-            userinfo.type = "user";
-            return done(null, userinfo);
-          } else {
-            connection.query(
-              "SELECT * FROM `Owner` WHERE `email` =" +
-                connection.escape(userinfo.email),
-              function (error, results, fields) {
-                if (error) throw error;
-                if (results.length != 0) {
-                  userinfo.type = "owner";
-                  return done(null, userinfo);
-                } else {
-                  userobj = {
-                    username: userinfo.email,
-                    firstname: userinfo.given_name,
-                    lastname: userinfo.family_name,
-                    email: userinfo.email,
-                    phone: "0000000000",
-                    address_zipcode: "00000",
-                    address_street: "000 Park Street",
-                  };
-                  connection.query(
-                    "INSERT INTO `User` SET ?",
-                    userobj,
-                    function (error, results, fields) {
-                      if (error) throw error;
-                      if (results.length != 0) {
-                        userinfo.new = true;
-                        return done(null, userinfo);
-                      }
+ownerloginstrat = new GoogleStrategy(
+  {
+    clientID:
+      "450927576549-gstvnstsb2taa9qfqda3f14fusjrfqsj.apps.googleusercontent.com",
+    clientSecret: "UPgRFeHYJC7i4Ed1tAGWCz4Y",
+    callbackURL: "/loginowner/callback",
+  },
+  async function (accessToken, refreshToken, profile, done) {
+    console.log('this is the ownerloginstrat')
+    userinfo = profile._json;
+    connection.query(
+      "SELECT * FROM `User` WHERE `email` =" +
+      connection.escape(userinfo.email),
+      function (error, results, fields) {
+        if (error) throw error;
+        if (results.length != 0) {
+          userinfo.type = "user";
+          return done(null, userinfo);
+        } else {
+          connection.query(
+            "SELECT * FROM `Owner` WHERE `email` =" +
+            connection.escape(userinfo.email),
+            function (error, results, fields) {
+              if (error) throw error;
+              if (results.length != 0) {
+                userinfo.type = "owner";
+                return done(null, userinfo);
+              } else {
+                userobj = {
+                  password: 'asdfasd',
+                  username: userinfo.email,
+                  firstname: userinfo.given_name,
+                  lastname: userinfo.family_name,
+                  email: userinfo.email,
+                  phone: "0000000000",
+                  shopID: 1,
+                };
+                connection.query(
+                  "INSERT INTO `Owner` SET ?",
+                  userobj,
+                  function (error, results, fields) {
+                    if (error) throw error;
+                    if (results.length != 0) {
+                      userinfo.new = true;
+                      return done(null, userinfo);
                     }
-                  );
-                }
+                  }
+                );
               }
-            );
-          }
+            }
+          );
         }
-      );
-    }
-  )
-);
+      }
+    );
+  }
+)
+
+userloginstrat = new GoogleStrategy(
+  {
+    clientID:
+      "450927576549-gstvnstsb2taa9qfqda3f14fusjrfqsj.apps.googleusercontent.com",
+    clientSecret: "UPgRFeHYJC7i4Ed1tAGWCz4Y",
+    callbackURL: "/login/callback",
+  },
+  async function (accessToken, refreshToken, profile, done) {
+    console.log('this is the userloginstrat')
+    userinfo = profile._json;
+    connection.query(
+      "SELECT * FROM `User` WHERE `email` =" +
+      connection.escape(userinfo.email),
+      function (error, results, fields) {
+        if (error) throw error;
+        if (results.length != 0) {
+          userinfo.type = "user";
+          return done(null, userinfo);
+        } else {
+          connection.query(
+            "SELECT * FROM `Owner` WHERE `email` =" +
+            connection.escape(userinfo.email),
+            function (error, results, fields) {
+              if (error) throw error;
+              if (results.length != 0) {
+                userinfo.type = "owner";
+                return done(null, userinfo);
+              } else {
+                userobj = {
+                  username: userinfo.email,
+                  firstname: userinfo.given_name,
+                  lastname: userinfo.family_name,
+                  email: userinfo.email,
+                  phone: "0000000000",
+                  address_zipcode: "00000",
+                  address_street: "000 Park Street",
+                };
+                connection.query(
+                  "INSERT INTO `User` SET ?",
+                  userobj,
+                  function (error, results, fields) {
+                    if (error) throw error;
+                    if (results.length != 0) {
+                      userinfo.new = true;
+                      return done(null, userinfo);
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      }
+    );
+  }
+)
 
 // Passport helper function to serialize the user for storage in the session
 passport.serializeUser((user, done) => {
@@ -135,7 +192,18 @@ passport.deserializeUser((id, done) => {
 
 app.use(
   "/login/callback",
-  passport.authenticate("google", { failureRedirect: "/index" }),
+  passport.authenticate(userloginstrat, { failureRedirect: "/index" }),
+  function (req, res) {
+    if (req.user.new) {
+      return res.redirect("/account");
+    }
+    res.redirect("/index");
+  }
+);
+
+app.use(
+  "/loginowner/callback",
+  passport.authenticate(ownerloginstrat, { failureRedirect: "/index" }),
   function (req, res) {
     if (req.user.new) {
       return res.redirect("/account");
@@ -146,9 +214,24 @@ app.use(
 
 app.use(
   "/login",
-  passport.authenticate("google", {
+  passport.authenticate(userloginstrat, {
     scope: "profile email openid",
   })
+);
+
+app.use(
+  "/loginowner",
+  passport.authenticate(ownerloginstrat, {
+    scope: "profile email openid",
+  })
+);
+
+app.use(
+  "/logout",
+  function (req, res, next) {
+    req.logout();
+    res.redirect('/');
+  }
 );
 
 app.use("/updateuser", function (req, res, next) {
@@ -179,6 +262,7 @@ app.use("/bakery", bakeryRouter);
 app.use("/chooses", choosesRouter);
 app.use("/editmenu", editMenuRouter);
 app.use("/receive", receiveRouter);
+app.use('/ownerlogin', ownerloginRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
