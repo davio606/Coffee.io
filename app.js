@@ -21,6 +21,7 @@ var aboutRouter = require("./routes/about");
 var orderRouter = require("./routes/order");
 var receiveRouter = require("./routes/receive");
 const ownerloginRouter = require('./routes/ownerlogin');
+const orderhistoryRouter = require('./routes/orderhistory');
 const { info } = require("console");
 var app = express();
 
@@ -265,6 +266,7 @@ app.use("/chooses", choosesRouter);
 app.use("/editmenu", editMenuRouter);
 app.use("/receive", receiveRouter);
 app.use('/ownerlogin', ownerloginRouter);
+app.use('/orderhistory', orderhistoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
