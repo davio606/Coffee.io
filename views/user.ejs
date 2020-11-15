@@ -24,18 +24,18 @@
     </header>
 
     <div class="form-user">
-        <form>
+        <form action="/updateuser" method="post">
             <h1>User Profile</h1>
             <img src= "./img/profile.png"><br>
-            <label>First name:</label>&nbsp;<input type="text" placeholder="David"><br>
-            <label>Last name:</label>&nbsp;<input type="text" placeholder="Yoon"><br>
-            <label>Username:</label>&nbsp;<input type="text" placeholder="davio606"><br>
-            <label>Email:</label>&nbsp;<input type="email" placeholder="davidyoon@virginia.edu"><br>
-            <label>Password:</label>&nbsp;<input type="password" placeholder="groot1234"><br>
-            <label>Phone Number:</label>&nbsp;<input type="phone" placeholder="703-455-4555"><br>
-            <label> Address Street:</label>&nbsp;<input type="text" placeholder="Address Street"><br>
-            <label> Address Zip Code:</label>&nbsp; <input type="text" placeholder="Address Zip code"><br>
-            <input type="button" value="Save Changes!">
+            <input type="text" name = "userID" value="<%= userdata.userID %>" hidden />
+            <label>First name:</label>&nbsp;<input type="text" name="fname" value="<%= userdata.firstname %>" placeholder=<%= userdata.firstname %>><br>
+            <label>Last name:</label>&nbsp;<input type="text" name="lname" value="<%= userdata.lastname %>" placeholder="<%= userdata.lastname %>"><br>
+            <label>Username:</label>&nbsp;<input type="text" name="username" value=<%= userdata.username %> placeholder="davio606"><br>
+            <label>Email:</label>&nbsp;<input type="email" name="email" disabled placeholder=<%= userdata.email %>><br>
+            <label>Phone Number:</label>&nbsp;<input type="phone" name="phone" value="<%= userdata.phone %>" placeholder=<%= userdata.phone %>><br>
+            <label> Address Street:</label>&nbsp;<input type="text" name="address_street" value="<%= userdata.address_street %>" placeholder="<%= userdata.address_street %>"><br>
+            <label> Address Zip Code:</label>&nbsp; <input type="text" name="address_zip" value="<%= userdata.address_zipcode %>" placeholder=<%= userdata.address_zipcode %>><br>
+            <input type="submit" value="Save Changes!">
         </form>
     </div>
 </body>

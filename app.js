@@ -5,11 +5,11 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const connection = require('./database');
+const connection = require("./database");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-var ownerRouter = require("./routes/owner");
+var accountRouter = require("./routes/account");
 var aboutRouter = require("./routes/about");
 var bakeryRouter = require("./routes/bakery");
 var choosesRouter = require("./routes/chooses");
@@ -20,7 +20,21 @@ var loginRouter = require("./routes/login");
 var aboutRouter = require("./routes/about");
 var orderRouter = require("./routes/order");
 var receiveRouter = require("./routes/receive");
+const { info } = require("console");
 var app = express();
+
+app.use(require("serve-static")(__dirname + "/../../public"));
+app.use(require("cookie-parser")());
+app.use(require("body-parser").urlencoded({ extended: true }));
+app.use(
+  require("express-session")({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -35,12 +49,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);
-app.use("/owner", ownerRouter);
+app.use("/account", accountRouter);
 app.use("/signup", signupRouter);
 
 function done(err, user) {
-  res.redirect('/find');
+  res.redirect("/find");
 }
+
 passport.use(
   new GoogleStrategy(
     {
@@ -49,20 +64,83 @@ passport.use(
       clientSecret: "UPgRFeHYJC7i4Ed1tAGWCz4Y",
       callbackURL: "/login/callback",
     },
-    function(accessToken, refreshToken, profile, done) {
-      console.log(profile._json);
-     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        return done(err, user);
-      //});
-      //MADE UP FUNCTION
+    async function (accessToken, refreshToken, profile, done) {
+      userinfo = profile._json;
+      connection.query(
+        "SELECT * FROM `User` WHERE `email` =" +
+          connection.escape(userinfo.email),
+        function (error, results, fields) {
+          if (error) throw error;
+          if (results.length != 0) {
+            userinfo.type = "user";
+            return done(null, userinfo);
+          } else {
+            connection.query(
+              "SELECT * FROM `Owner` WHERE `email` =" +
+                connection.escape(userinfo.email),
+              function (error, results, fields) {
+                if (error) throw error;
+                if (results.length != 0) {
+                  userinfo.type = "owner";
+                  return done(null, userinfo);
+                } else {
+                  userobj = {
+                    username: userinfo.email,
+                    firstname: userinfo.given_name,
+                    lastname: userinfo.family_name,
+                    email: userinfo.email,
+                    phone: "0000000000",
+                    address_zipcode: "00000",
+                    address_street: "000 Park Street",
+                  };
+                  connection.query(
+                    "INSERT INTO `User` SET ?",
+                    userobj,
+                    function (error, results, fields) {
+                      if (error) throw error;
+                      if (results.length != 0) {
+                        userinfo.new = true;
+                        return done(null, userinfo);
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+        }
+      );
     }
   )
 );
+
+// Passport helper function to serialize the user for storage in the session
+passport.serializeUser((user, done) => {
+  if (user) {
+    return done(null, JSON.stringify(user));
+  }
+
+  return done(new Error("Cannot serialize user."));
+});
+
+// Passport helper function to deserialize the user from the ID in the session
+passport.deserializeUser((id, done) => {
+  try {
+    const user = JSON.parse(id);
+    return done(null, user);
+  } catch (e) {
+    return done(new Error("Cannot deserialize user."));
+  }
+});
+
 app.use(
   "/login/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
+  passport.authenticate("google", { failureRedirect: "/index" }),
   function (req, res) {
-    res.redirect("/find");
+    if (req.user.new) {
+      return res.redirect("/account");
+    }
+    res.redirect("/index");
   }
 );
 
@@ -72,6 +150,27 @@ app.use(
     scope: "profile email openid",
   })
 );
+
+app.use("/updateuser", function (req, res, next) {
+  console.log(req.body);
+  connection.query(
+    "UPDATE User SET username = ?, firstname = ?, lastname = ?, phone = ?, address_street = ?, address_zipcode = ? WHERE userID = ?",
+    [
+      req.body.username,
+      req.body.fname,
+      req.body.lname,
+      req.body.phone,
+      req.body.address_street,
+      req.body.address_zip,
+      parseInt(req.body.userID),
+    ],
+    function (error, results, fields) {
+      console.log(error);
+      console.log(results);
+      res.redirect("/account");
+    }
+  );
+});
 
 app.use("/about", aboutRouter);
 app.use("/find", findRouter);
@@ -96,18 +195,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-app.use(require("serve-static")(__dirname + "/../../public"));
-app.use(require("cookie-parser")());
-app.use(require("body-parser").urlencoded({ extended: true }));
-app.use(
-  require("express-session")({
-    secret: "keyboard cat",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
 
 module.exports = app;

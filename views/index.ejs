@@ -13,9 +13,12 @@
                 <a href="/"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
                </div>
                <nav>
-                   <u1>
-                    <li><a href="/signup">Sign Up</a></li>
-                    <li><a href="/login">Login</a></li>
+                   <u1><% if (!user) { %>
+                    <li><a href="/login">Sign Up/Login</a></li>
+                    <% } else { %>
+                        <li><a href="/signup"><%= user %></a></li>
+                        <li><a href="/account">Account</a></li>
+                        <% } %>
                     <li><a href="/about">About</a></li>
                    </u1>
                </nav>
