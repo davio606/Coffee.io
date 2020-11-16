@@ -25,7 +25,7 @@
         </div>
         <% if (user.type == "owner") {%>
         <form action="/export?shopID=<%= shopID %>" method="post">
-            <input type="submit" name="upvote" value="Upvote" class="button button2">Export All </input>
+            <input type="submit" name="upvote" value="Export All" class="button button2" />
         </form>
         <% } %>
         <% orderdata.forEach(order => { %>

@@ -11,3 +11,6 @@ handlers:
 
 - url: .*
   script: auto
+
+env_variables:
+  GCLOUD_STORAGE_BUCKET: cs4750db-csvexport

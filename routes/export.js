@@ -4,6 +4,7 @@ const connection = require('../database');
 const { Parser } = require('json2csv');
 fs = require('fs');
 
+
 /* GET home page. */
 router.post('/', function (req, res, next) {
     let shopID = req.query.shopID;
@@ -16,14 +17,18 @@ router.post('/', function (req, res, next) {
             const colnames = ['orderID', 'userID', 'shopID', 'price_subtotal', 'price_taxes', 'tip', 'status', 'datetimeplaced', 'datetimefulfilled', 'special_instructions'];
             const opts = { colnames };
 
-            try {
-                const parser = new Parser(opts);
-                const csv = parser.parse(results);
-                console.log(csv);
-            } catch (err) {
-                console.error(err);
-            }
-            res.redirect('/orderhistory');
+
+            const parser = new Parser(opts);
+            const csv = parser.parse(results);
+            let path = '/tmp/file' + Date.now() + '.csv';
+            fs.writeFile(path, csv, function (err, data) {
+                console.log(path);
+                if (err) { throw err; }
+                else {
+                    console.log('yoooooooooo')
+                    res.download(path); // This is what you need
+                }
+            });
         }
     );
 });
