@@ -30,7 +30,7 @@
         <% } %>
         <% orderdata.forEach(order => { %>
         <div>
-           <%= order.orderID %>
+           ID: <%= order.orderID %> | Date: <%= order.datetimeplaced %> | Price: <%= order.price_subtotal %> | Shop: <%= order.shopID %>
         </div>
         <% }) %>
     </div>

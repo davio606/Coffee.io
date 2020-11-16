@@ -11,7 +11,9 @@ router.get('/', function(req, res, next) {
     "SELECT * FROM `MenuItemOptions` WHERE itemID= ?", id,
     function(error, results, fields) {
       if (error) throw error;
- 	  res.render('chooses', { title: 'Express', name:name, user: req.user, options: results,helper:helper});
+      console.log(results[0].multiselect);
+
+ 	  res.render('chooses', { title: 'Express', itemID: id, shopid: req.query.shopid, name:name, user: req.user, options: results, helper:helper});
     }
   );
 

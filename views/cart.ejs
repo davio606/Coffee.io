@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>coffee.io | Order History</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <a href="/index"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="title">
+            <h4>Shopping Cart</h4> <br>
+
+        </div>
+        <% if (cartdata) {%>
+        <% cartdata.forEach(order => { %>
+        <div>
+            <%= order.name %>
+            <form action="/deletecartitem?cartID=<%= order.cartID %>" method="post">
+                <input type="submit" name="upvote" value="Delete Item" class="button button2" />
+            </form>
+        </div>
+        <% }) %>
+
+        <div>Total: <%= total %></div>
+        <form action="/placeorder" method="post">
+            <input type="submit" name="upvote" value="Place Order" class="button button2" />
+        </form>
+
+        <% } else {%>
+        <div>empty</div>
+        <% } %>
+    </div>
+</body>
+
+</html>

@@ -25,6 +25,7 @@ var helpRouter = require("./helper");
 const ownerloginRouter = require('./routes/ownerlogin');
 const orderhistoryRouter = require('./routes/orderhistory');
 const exportRouter = require('./routes/export');
+const cartRouter = require('./routes/cart');
 const { info } = require("console");
 var app = express();
 
@@ -241,6 +242,75 @@ app.use(
   }
 );
 
+app.use('/placeorder', function (req, res, next) {
+  connection.query(
+    "SELECT * From `User` WHERE email = ?", req.user.email,
+    function (error, results, fields) {
+      let userID = results[0].userID;
+      connection.query(
+        "SELECT * From ShoppingCart WHERE userID = ?", results[0].userID,
+        function (error, resultsb, fields) {
+          let total = 0
+          function myFunc(total, num) {
+            return parseFloat(total) + parseFloat(num);
+          }
+          if (resultsb.length != 0) {
+            total = resultsb.reduce(myFunc);
+          }
+          console.log(total);
+          let orderobj = {
+            userID: results[0].userID,
+            shopID: resultsb[0].shopID,
+            price_subtotal: total,
+            price_taxes: total * 0.05,
+            tip: 0,
+            status: 'Order Placed',
+            datetimeplaced: Date.now(),
+            special_instructions: "N/A"
+          }
+          connection.query(
+            "INSERT INTO `ListOrders` SET ?",
+            orderobj,
+            function (error, resultsc, fields) {
+              if (error) throw error;
+              connection.query(
+                "DELETE FROM ShoppingCart WHERE userID = ?",
+                userID,
+                function (error, results, fields) {
+                  if (error) throw error;
+                  res.redirect("/orderhistory")
+                }
+              );
+            }
+          );
+        }
+      );
+    }
+  );
+
+
+  connection.query(
+    "DELETE From ShoppingCart WHERE cartID = ?", req.query.cartID,
+    function (error, results, fields) {
+      console.log(error);
+      console.log(results);
+      res.redirect("/cart");
+    }
+  );
+})
+
+app.use("/deletecartitem", function (req, res, next) {
+  connection.query(
+    "DELETE From ShoppingCart WHERE cartID = ?", req.query.cartID,
+    function (error, results, fields) {
+      console.log(error);
+      console.log(results);
+      res.redirect("/cart");
+    }
+  );
+});
+
+
 app.use("/updateuser", function (req, res, next) {
   console.log(req.body);
   connection.query(
@@ -272,6 +342,8 @@ app.use("/receive", receiveRouter);
 app.use('/ownerlogin', ownerloginRouter);
 app.use('/orderhistory', orderhistoryRouter);
 app.use('/export', exportRouter);
+app.use('/cart', cartRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

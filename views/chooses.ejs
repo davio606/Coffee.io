@@ -9,23 +9,24 @@
 </head>
 
 <body>
-<header>
-    <div class="container">
-       <div id="branding">
-        <a href="/"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
-       </div>
-       <nav>
-           <u1><% if (!user) { %>
-            <li><a href="/login">Sign Up/Login</a></li>
-            <% } else { %>
-                <li><a href="/signup"><%= user %></a></li>
-                <li><a href="/account">Account</a></li>
-                <% } %>
-            <li><a href="/about">About</a></li>
-           </u1>
-       </nav>
-    </div>
-</header>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <a href="/"><img src="img/mug.png" title="Home" alt="mug clicked takes you to home page"></a>
+            </div>
+            <nav>
+                <u1><% if (!user) { %>
+                    <li><a href="/login">Sign Up/Login</a></li>
+                    <% } else { %>
+                    <li><a href="/signup"><%= user %></a></li>
+                    <li><a href="/account">Account</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <% } %>
+
+                </u1>
+            </nav>
+        </div>
+    </header>
     <div class="wrapper">
         <div class="title">
             <h3>Order Form</h3>
@@ -34,21 +35,40 @@
         </div>
         <div class="menu">
             <div class="order-menu">
-            
+
                 <div class="order-menu-options">
                     <h1>Select Options</h1>
-                    <form>
-                        <% if (options) { %> 
-                            <% options.forEach(option => { %>
-                                <label class="check-options"><%= option.options %>
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                            </label>
-                            <% }) %>
+                    <form action="/addOrder">
+
+                        <% if (options) { %>
+                        <% options.forEach(option => { %>
+                        <% let optionchoicelist = JSON.parse(option.optionchoices) %>
+                        <div><%= option.optionname %> </div>
+
+                        <% if (option.multiselect == '1') { %>
+                        <% for (let choice in optionchoicelist) { %>
+                        <input type="checkbox" name="<%= optionchoicelist[choice] %>"
+                            value='<%= optionchoicelist[choice] %>'> <label
+                            for='<%= optionchoicelist[choice] %>'><%= optionchoicelist[choice] %></label>
                         <% } %>
-                        <label class="check-options">Select Quantity
-                        <input id="num" type="number" min="1" max="30"> </label>
-                        <button class="button button2" onclick = "/addOrder?userid='+<%=user.userID %>'&Quantity=1&name='+<%= name%>'&price=2.50">Add to Cart</button>
+                        <% } else { %>
+                        <select name="<%= option.optionname %>">
+                            <option value="None,0">None</option>
+                            <% for (let choice in optionchoicelist) { %>
+                            <option value="<%= optionchoicelist[choice] %>"><%= optionchoicelist[choice] %>
+                            </option>
+                            <% } %>
+                        </select>
+                        <% } %>
+                        <% }) %>
+                        <% } %>
+                        <label for="quant" class="check-options">Select Quantity </label>
+                        <input id="num" name="quant" type="number" min="1" max="30" />
+                        <input name="itemname" value="<%= name %>" hidden/>
+                        <input name="itemID" value="<%= itemID %>" hidden/>
+                        <input name="email" value="<%= user.email %>" hidden/>
+                        <input name="shopid" value="<%= shopid %>" hidden/>
+                        <input class="button button2" type="submit">Add to Cart</input>
                     </form>
                 </div>
             </div>

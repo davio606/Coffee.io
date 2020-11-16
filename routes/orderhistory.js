@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
                         "SELECT * FROM `ListOrders` WHERE userID = ? ", results[0].userID,
                         function (error, resultsb, fields) {
                             if (error) throw error;
-                            res.render('orderhistory', { title: 'Express', orderdata: resultsb });
+                            res.render('orderhistory', { title: 'Express', user: req.user, shopID: results[0].shopID, orderdata: resultsb });
                         }
                     );
                 }
